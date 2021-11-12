@@ -1,0 +1,37 @@
+.ui-friend__current-element-container {
+    position: fixed;
+    border: 2px solid red;
+    z-index: 99999;
+    pointer-events: none;
+}
+
+.ui-friend__current-element-tag {
+    position: absolute;
+    display: inline-block;
+    background-color: red;
+    color: #fff;
+    font-size: 12px;
+    height: 16px;
+    padding: 0 2px;
+    border-radius: 2px;
+    line-height: 16px;
+}
+
+.ui-friend__target-element-container {
+    position: fixed;
+    border: 2px solid blue;
+    z-index: 99999;
+    pointer-events: none;
+}
+
+.ui-friend__target-element-tag {
+    position: absolute;
+    display: inline-block;
+    background-color: blue;
+    color: #fff;
+    font-size: 12px;
+    height: 16px;
+    padding: 0 2px;
+    border-radius: 2px;
+    line-height: 16px;
+}
