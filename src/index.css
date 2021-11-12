@@ -35,3 +35,19 @@
     border-radius: 2px;
     line-height: 16px;
 }
+
+.ui-friend__line {
+    position: fixed;
+    background-color: red;
+}
+
+.ui-friend__line-tag {
+    position: absolute;
+    font-size: 12px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background-color: red;
+    color: #fff;
+    z-index: 2;
+}
