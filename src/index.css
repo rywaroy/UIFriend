@@ -15,6 +15,9 @@
     padding: 0 2px;
     border-radius: 2px;
     line-height: 16px;
+    pointer-events: none;
+    left: 0;
+    top: -16px;
 }
 
 .ui-friend__target-element-container {
@@ -34,11 +37,15 @@
     padding: 0 2px;
     border-radius: 2px;
     line-height: 16px;
+    pointer-events: none;
+    left: 0;
+    top: -16px;
 }
 
 .ui-friend__line {
     position: fixed;
     background-color: red;
+    pointer-events: none;
 }
 
 .ui-friend__line-tag {

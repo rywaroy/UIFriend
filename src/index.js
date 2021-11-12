@@ -138,6 +138,8 @@ class Mark {
 
     create() {
         this.createTopLine();
+        this.createBottomLine();
+        this.createLeftLine();
     }
 
     createTopLine() {
@@ -148,7 +150,7 @@ class Mark {
             ) {
                 const height = Math.round(Math.abs(this.current.top - this.target.bottom));
                 const width = 2;
-                const x = this.topLineX();
+                const x = this.verticalLineX();
                 const y = this.target.bottom;
                 this.topLine = new Line(width, height, x, y, `${height}px`, 'top');
                 this.topLine.create();
@@ -156,14 +158,14 @@ class Mark {
         } else {
             const height = Math.round(Math.abs(this.current.top - this.target.top));
             const width = 2;
-            const x = this.topLineX();
+            const x = this.verticalLineX();
             const y = Math.min(this.current.top, this.target.top);
             this.topLine = new Line(width, height, x, y, `${height}px`, 'top');
             this.topLine.create();
         }
     }
 
-    topLineX() {
+    verticalLineX() {
         if (this.current.width > this.target.width) {
             if (this.current.left > this.target.left) { // target 在左上
                 return (this.target.right - this.current.left) / 2 + this.current.left;
@@ -183,12 +185,42 @@ class Mark {
         }
     }
 
+    createBottomLine() {
+        if (this.outside) {
+            if (this.target.top > this.current.bottom &&
+                this.current.left < this.target.right &&
+                this.current.right > this.target.left
+            ) {
+                const height = Math.round(Math.abs(this.target.top - this.current.bottom));
+                const width = 2;
+                const x = this.verticalLineX();
+                const y = this.current.bottom;
+                this.bottomLine = new Line(width, height, x, y, `${height}px`, 'top');
+                this.bottomLine.create();
+            }
+        } else {
+            const height = Math.round(Math.abs(this.target.bottom - this.current.bottom));
+            const width = 2;
+            const x = this.verticalLineX();
+            const y = Math.min(this.current.bottom, this.target.bottom);
+            this.bottomLine = new Line(width, height, x, y, `${height}px`, 'top');
+            this.bottomLine.create();
+        }
+    }
+
+
+
+
+
     remove() {
         if (this.topLine) {
             this.topLine.remove();
             this.topLine = null;
         }
-        
+        if (this.bottomLine) {
+            this.bottomLine.remove();
+            this.bottomLine = null;
+        }
     }
 }
 
@@ -223,6 +255,7 @@ class UIFriend {
             }
             this.targetElement = new TargetElement(element);
             this.targetElement.create();
+            this.createMark();
         }
     }
 
@@ -264,7 +297,6 @@ class UIFriend {
     onMounseMove() {
         if (this.active) {
             this.createTargetElement();
-            this.createMark();
         }
     }
 
