@@ -127,24 +127,13 @@ class Mark {
         this.current = new Rect(currentRect);
         this.target = new Rect(targetRect);
         this.outside = this.current.outside(this.target);
-
-        // if (this.outside) {
-        //     this.top = Math.round(Math.abs(this.current.top - this.target.bottom));
-        //     this.bottom = Math.round(Math.abs(this.current.bottom - this.target.top));
-        //     this.left = Math.round(Math.abs(this.current.left - this.target.right));
-        //     this.right = Math.round(Math.abs(this.current.right - this.target.left));
-        // } else {
-        //     this.top = Math.round(Math.abs(this.current.top - this.target.top));
-        //     this.bottom = Math.round(Math.abs(this.current.bottom - this.target.bottom));
-        //     this.left = Math.round(Math.abs(this.current.left - this.target.left));
-        //     this.right = Math.round(Math.abs(this.current.right - this.target.right));
-        // }
     }
 
     create() {
         this.createTopLine();
         this.createBottomLine();
         this.createLeftLine();
+        this.createRightLine();
     }
 
     createTopLine() {
@@ -167,26 +156,6 @@ class Mark {
             const y = Math.min(this.current.top, this.target.top);
             this.topLine = new Line(width, height, x, y, `${height}px`, 'top');
             this.topLine.create();
-        }
-    }
-
-    verticalLineX() {
-        if (this.current.width > this.target.width) {
-            if (this.current.left > this.target.left) { // target 在左上
-                return (this.target.right - this.current.left) / 2 + this.current.left;
-            } else if (this.current.right < this.target.right) { // target 在右上
-                return (this.current.right - this.target.left) / 2 + this.target.left;
-            } else { // 上方
-                return this.target.left + (this.target.width / 2);
-            }
-        } else {
-            if (this.target.right < this.current.right) { // target 在左上
-                return (this.target.right - this.current.left) / 2 + this.current.left;
-            } else if (this.target.left > this.current.left) { // target 在右上
-                return (this.current.right - this.target.left) / 2 + this.target.left;
-            } else { // 上方
-                return this.current.left + (this.current.width / 2);
-            }
         }
     }
 
@@ -213,6 +182,26 @@ class Mark {
         }
     }
 
+    verticalLineX() {
+        if (this.current.width > this.target.width) {
+            if (this.current.left > this.target.left) { // target 在左上
+                return (this.target.right - this.current.left) / 2 + this.current.left;
+            } else if (this.current.right < this.target.right) { // target 在右上
+                return (this.current.right - this.target.left) / 2 + this.target.left;
+            } else { // 上方
+                return this.target.left + (this.target.width / 2);
+            }
+        } else {
+            if (this.target.right < this.current.right) { // target 在左上
+                return (this.target.right - this.current.left) / 2 + this.current.left;
+            } else if (this.target.left > this.current.left) { // target 在右上
+                return (this.current.right - this.target.left) / 2 + this.target.left;
+            } else { // 上方
+                return this.current.left + (this.current.width / 2);
+            }
+        }
+    }
+
     createLeftLine() {
         if (this.outside) {
             if (
@@ -234,6 +223,30 @@ class Mark {
             const y = this.horizontalLineY();
             this.leftLine = new Line(width, height, x, y, `${width}px`, 'left');
             this.leftLine.create();
+        }
+    }
+
+    createRightLine() {
+        if (this.outside) {
+            if (
+                this.target.left > this.current.right &&
+                this.current.top < this.target.bottom &&
+                this.current.bottom > this.target.top
+            ) {
+                const height = 2;
+                const width = Math.round(Math.abs(this.target.left - this.current.right));
+                const x = this.current.right;
+                const y = this.horizontalLineY();
+                this.rightLine = new Line(width, height, x, y, `${width}px`, 'left');
+                this.rightLine.create();
+            }
+        } else {
+            const height = 2;
+            const width = Math.round(Math.abs(this.current.right - this.target.right));
+            const x = Math.min(this.current.right, this.target.right);
+            const y = this.horizontalLineY();
+            this.rightLine = new Line(width, height, x, y, `${width}px`, 'left');
+            this.rightLine.create();
         }
     }
 
@@ -270,6 +283,10 @@ class Mark {
         if (this.leftLine) {
             this.leftLine.remove();
             this.leftLine = null;
+        }
+        if (this.rightLine) {
+            this.rightLine.remove();
+            this.rightLine = null;
         }
     }
 }
