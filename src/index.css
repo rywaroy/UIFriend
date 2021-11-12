@@ -40,6 +40,7 @@
     pointer-events: none;
     left: 0;
     top: -16px;
+    box-sizing: border-box;
 }
 
 .ui-friend__line {

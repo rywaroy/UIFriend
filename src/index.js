@@ -102,9 +102,14 @@ class Line {
         const lineTag = document.createElement('span');
         lineTag.classList.add('ui-friend__line-tag');
         lineTag.innerText = this.text;
-        if (this.type === 'top') {
+        if (this.type === 'top' || this.type === 'bottom') {
             lineTag.style.left = '5px';
             lineTag.style.top = `${this.height / 2 - 8}px`;
+        }
+        if (this.type === 'left' || this.type === 'right') {
+            lineTag.style.left = `50%`;
+            lineTag.style.transform = 'translateX(-50%)';
+            lineTag.style.top = '5px';
         }
         this.line.appendChild(lineTag);
     }
@@ -195,7 +200,7 @@ class Mark {
                 const width = 2;
                 const x = this.verticalLineX();
                 const y = this.current.bottom;
-                this.bottomLine = new Line(width, height, x, y, `${height}px`, 'top');
+                this.bottomLine = new Line(width, height, x, y, `${height}px`, 'bottom');
                 this.bottomLine.create();
             }
         } else {
@@ -203,14 +208,55 @@ class Mark {
             const width = 2;
             const x = this.verticalLineX();
             const y = Math.min(this.current.bottom, this.target.bottom);
-            this.bottomLine = new Line(width, height, x, y, `${height}px`, 'top');
+            this.bottomLine = new Line(width, height, x, y, `${height}px`, 'bottom');
             this.bottomLine.create();
         }
     }
 
+    createLeftLine() {
+        if (this.outside) {
+            if (
+                this.current.left > this.target.right &&
+                this.current.top < this.target.bottom &&
+                this.current.bottom > this.target.top
+            ) {
+                const height = 2;
+                const width = Math.round(Math.abs(this.current.left - this.target.right));
+                const x = this.target.right;
+                const y = this.horizontalLineY();
+                this.leftLine = new Line(width, height, x, y, `${width}px`, 'left');
+                this.leftLine.create();
+            }
+        } else {
+            const height = 2;
+            const width = Math.round(Math.abs(this.current.left - this.target.left));
+            const x = Math.min(this.current.left, this.target.left);
+            const y = this.horizontalLineY();
+            this.leftLine = new Line(width, height, x, y, `${width}px`, 'left');
+            this.leftLine.create();
+        }
+    }
 
-
-
+    horizontalLineY() {
+        if (this.current.height > this.target.height) {
+            if (this.current.top > this.target.top) { // 上方
+                return (this.target.bottom - this.current.top) / 2 + this.current.top;
+            } else if (this.target.bottom > this.current.bottom) { // 下方
+                return (this.current.bottom - this.target.top) / 2 + this.target.top;
+            } else { // 中间
+                return this.target.bottom - (this.target.height / 2);
+            }
+        } else {
+            if (this.current.bottom > this.target.bottom) {  // 上方
+                return (this.target.bottom - this.current.top) / 2 + this.current.top;
+            } else if (this.current.top < this.target.top) { // 下方
+                return (this.current.bottom - this.target.top) / 2 + this.target.top;
+            } else { // 中间
+                return this.current.bottom - (this.current.height / 2);
+            }
+        }
+    }
+    
 
     remove() {
         if (this.topLine) {
@@ -220,6 +266,10 @@ class Mark {
         if (this.bottomLine) {
             this.bottomLine.remove();
             this.bottomLine = null;
+        }
+        if (this.leftLine) {
+            this.leftLine.remove();
+            this.leftLine = null;
         }
     }
 }
