@@ -1,6 +1,6 @@
 .ui-friend__current-element-container {
     position: fixed;
-    border: 2px solid red;
+    border: 2px solid #E02401;
     z-index: 99999;
     pointer-events: none;
 }
@@ -8,7 +8,7 @@
 .ui-friend__current-element-tag {
     position: absolute;
     display: inline-block;
-    background-color: red;
+    background-color: #E02401;
     color: #fff;
     font-size: 12px;
     height: 16px;
@@ -22,7 +22,7 @@
 
 .ui-friend__target-element-container {
     position: fixed;
-    border: 2px solid blue;
+    border: 2px solid #1597E5;
     z-index: 99999;
     pointer-events: none;
 }
@@ -30,7 +30,7 @@
 .ui-friend__target-element-tag {
     position: absolute;
     display: inline-block;
-    background-color: blue;
+    background-color: #1597E5;
     color: #fff;
     font-size: 12px;
     height: 16px;
@@ -45,17 +45,26 @@
 
 .ui-friend__line {
     position: fixed;
-    background-color: red;
     pointer-events: none;
+    z-index: 99999;
+}
+
+.ui-friend__line.vertical {
+    border-left: 2px dashed #FF7878;
+}
+
+.ui-friend__line.horizontal {
+    border-top: 2px dashed #FF7878;
 }
 
 .ui-friend__line-tag {
     position: absolute;
     font-size: 12px;
     height: 16px;
+    line-height: 16px;
     padding: 0 4px;
     border-radius: 8px;
-    background-color: red;
+    background-color: #E02401;
     color: #fff;
     z-index: 2;
 }
