@@ -1,4 +1,5 @@
 const ACTIVE_KEY_CODE = 17;
+const TAG_HEIGHT = 16;
 
 class CurrentElement {
     constructor(element) {
@@ -19,6 +20,12 @@ class CurrentElement {
         this.tag = document.createElement('span');
         this.tag.classList.add('ui-friend__current-element-tag');
         this.tag.innerText = `${Math.round(width)}px × ${Math.round(height)}px`;
+        if (top < TAG_HEIGHT) {
+            this.tag.style.top = `${top < 0 ? -top : 0}px`;
+        }
+        if (left < 0) {
+            this.tag.style.left = `${-left}px`;
+        }
         this.container.appendChild(this.tag);
     }
 
@@ -49,6 +56,13 @@ class TargetElement {
         this.tag = document.createElement('span');
         this.tag.classList.add('ui-friend__target-element-tag');
         this.tag.innerText = `${Math.round(width)}px × ${Math.round(height)}px`;
+
+        if (top < TAG_HEIGHT) {
+            this.tag.style.top = `${top < 0 ? -top : 0}px`;
+        }
+        if (left < 0) {
+            this.tag.style.left = `${-left}px`;
+        }
         this.container.appendChild(this.tag);
     }
 
