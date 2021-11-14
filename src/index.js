@@ -11,10 +11,10 @@ class CurrentElement {
         this.container = document.createElement('div');
         this.container.classList.add('ui-friend__current-element-container');
         const { top, left, width, height } = this.rect;
-        this.container.style.top = `${top - 1}px`;
-        this.container.style.left = `${left - 1}px`;
-        this.container.style.width = `${width - 2}px`;
-        this.container.style.height = `${height - 2}px`;
+        this.container.style.top = `${top}px`;
+        this.container.style.left = `${left}px`;
+        this.container.style.width = `${width}px`;
+        this.container.style.height = `${height}px`;
         document.body.appendChild(this.container);
 
         this.tag = document.createElement('span');
@@ -47,10 +47,10 @@ class TargetElement {
         this.container = document.createElement('div');
         this.container.classList.add('ui-friend__target-element-container');
         const { top, left, width, height } = this.rect;
-        this.container.style.top = `${top - 1}px`;
-        this.container.style.left = `${left - 1}px`;
-        this.container.style.width = `${width - 2}px`;
-        this.container.style.height = `${height - 2}px`;
+        this.container.style.top = `${top}px`;
+        this.container.style.left = `${left}px`;
+        this.container.style.width = `${width}px`;
+        this.container.style.height = `${height}px`;
         document.body.appendChild(this.container);
 
         this.tag = document.createElement('span');

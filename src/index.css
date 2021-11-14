@@ -3,6 +3,7 @@
     border: 2px solid #E02401;
     z-index: 99999;
     pointer-events: none;
+    box-sizing: border-box;
 }
 
 .ui-friend__current-element-tag {
@@ -16,7 +17,7 @@
     border-radius: 2px;
     line-height: 16px;
     pointer-events: none;
-    left: 0;
+    left: -2px;
     top: -16px;
 }
 
@@ -25,6 +26,7 @@
     border: 2px solid #1597E5;
     z-index: 99999;
     pointer-events: none;
+    box-sizing: border-box;
 }
 
 .ui-friend__target-element-tag {
@@ -38,7 +40,7 @@
     border-radius: 2px;
     line-height: 16px;
     pointer-events: none;
-    left: 0;
+    left: -2px;
     top: -16px;
     box-sizing: border-box;
 }
