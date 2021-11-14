@@ -377,10 +377,17 @@ class UIFriend {
         }
     }
 
+    onMouseWheel() {
+        if (this.active) {
+            this.clear();
+        }
+    }
+
     start() {
         window.addEventListener('keydown', this.onKeyDown.bind(this));
         window.addEventListener('mousemove', this.onMounseMove.bind(this));
         window.addEventListener('mousedown', this.onMouseDown.bind(this));
+        window.addEventListener('mousewheel', this.onMouseWheel.bind(this));
         this.addStyle();
     }
 
@@ -388,6 +395,7 @@ class UIFriend {
         window.removeEventListener('keydown', this.onKeyDown.bind(this));
         window.removeEventListener('mousemove', this.onMounseMove.bind(this));
         window.removeEventListener('mousedown', this.onMouseDown.bind(this));
+        window.removeEventListener('mousewheel', this.onMouseWheel.bind(this));
         this.removeStyle();
     }
 
