@@ -1,4 +1,4 @@
-const ACTIVE_KEY_CODE = 17;
+const ACTIVE_KEY_CODE = 18;
 const TAG_HEIGHT = 16;
 
 class CurrentElement {
@@ -304,20 +304,14 @@ class UIFriend {
         this.mark = null;
     }
 
-    createCurrentElement() {
-        const elements = document.querySelectorAll(':hover');
-        const element = elements[elements.length - 1];
-
+    createCurrentElement(element) {
         if (element && (element !== (this.currentElement ? this.currentElement.element : null))) {
             this.currentElement = new CurrentElement(element);
             this.currentElement.create();
         }
     }
 
-    createTargetElement() {
-        const elements = document.querySelectorAll(':hover');
-        const element = elements[elements.length - 1];
-        
+    createTargetElement(element) {
         if (element && 
             (element !== (this.currentElement ? this.currentElement.element : null)) &&
             (element !== (this.targetElement ? this.targetElement.element : null))
@@ -342,47 +336,58 @@ class UIFriend {
     }
 
     onKeyDown(e) {
-        if (e.keyCode === ACTIVE_KEY_CODE && !this.active) {
-            e.preventDefault();
-            this.active = true;
-            this.createCurrentElement();
-        }
-    }
-
-    onKeyUp(e) {
         if (e.keyCode === ACTIVE_KEY_CODE) {
-            this.active = false;
-            if (this.currentElement) {
-                this.currentElement.remove();
-                this.currentElement = null;
-            }
-            if (this.targetElement) {
-                this.targetElement.remove();
-                this.targetElement = null;
-            }
-            if (this.mark) {
-                this.mark.remove();
-            }
+            e.preventDefault();
+            this.clear();
+            const elements = document.querySelectorAll(':hover');
+            const element = elements[elements.length - 1];
+            this.active = true;
+            this.createCurrentElement(element);
         }
     }
 
-    onMounseMove() {
+    onMounseMove(e) {
         if (this.active) {
-            this.createTargetElement();
+            this.createTargetElement(e.target);
+        }
+    }
+
+    onMouseDown(e) {
+        e.preventDefault();
+        this.clear();
+        if (e.button === 0) { // 左键选中当前元素
+            this.active = true;
+            this.createCurrentElement(e.target);
+        }
+    }
+
+    clear() {
+        this.active = false;
+        if (this.mark) {
+            this.mark.remove();
+            this.mark = null;
+        }
+        if (this.currentElement) {
+            this.currentElement.remove();
+            this.currentElement = null;
+        }
+        if (this.targetElement) {
+            this.targetElement.remove();
+            this.targetElement = null;
         }
     }
 
     start() {
         window.addEventListener('keydown', this.onKeyDown.bind(this));
-        window.addEventListener('keyup', this.onKeyUp.bind(this));
         window.addEventListener('mousemove', this.onMounseMove.bind(this));
+        window.addEventListener('mousedown', this.onMouseDown.bind(this));
         this.addStyle();
     }
 
     stop() {
         window.removeEventListener('keydown', this.onKeyDown.bind(this));
-        window.removeEventListener('keyup', this.onKeyUp.bind(this));
         window.removeEventListener('mousemove', this.onMounseMove.bind(this));
+        window.removeEventListener('mousedown', this.onMouseDown.bind(this));
         this.removeStyle();
     }
 
