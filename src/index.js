@@ -60,26 +60,6 @@ class TargetElement {
     }
 }
 
-class Rect {
-    constructor(rect) {
-        this.top = rect.top;
-        this.left = rect.left;
-        this.width = rect.width;
-        this.height = rect.height;
-        this.right = rect.right;
-        this.bottom = rect.bottom;
-    }
-
-    outside(other) {
-        return (
-            this.right <= other.left || // current 在 target 左边
-            this.left >= other.right || // current 在 target 右边
-            this.bottom <= other.top || // current 在 target 上边
-            this.top >= other.bottom // current 在 target 下边
-        )
-    }
-}
-
 class Line {
     constructor(width, height, x, y, text, type) {
         this.width = width;
@@ -105,11 +85,13 @@ class Line {
         if (this.type === 'top' || this.type === 'bottom') {
             lineTag.style.left = '5px';
             lineTag.style.top = `${this.height / 2 - 8}px`;
+            this.line.classList.add('vertical');
         }
         if (this.type === 'left' || this.type === 'right') {
             lineTag.style.left = `50%`;
             lineTag.style.transform = 'translateX(-50%)';
             lineTag.style.top = '5px';
+            this.line.classList.add('horizontal');
         }
         this.line.appendChild(lineTag);
     }
@@ -124,9 +106,18 @@ class Line {
 
 class Mark {
     constructor(currentRect, targetRect) {
-        this.current = new Rect(currentRect);
-        this.target = new Rect(targetRect);
-        this.outside = this.current.outside(this.target);
+        this.current = currentRect;
+        this.target = targetRect;
+        this.outside = this.outside(this.current, this.target);
+    }
+
+    outside(current, target) {
+        return (
+            current.right <= target.left || // current 在 target 左边
+            current.left >= target.right || // current 在 target 右边
+            current.bottom <= target.top || // current 在 target 上边
+            current.top >= target.bottom // current 在 target 下边
+        )
     }
 
     create() {
@@ -378,6 +369,7 @@ class UIFriend {
         window.removeEventListener('keydown', this.onKeyDown.bind(this));
         window.removeEventListener('keyup', this.onKeyUp.bind(this));
         window.removeEventListener('mousemove', this.onMounseMove.bind(this));
+        this.removeStyle();
     }
 
     addStyle() {
