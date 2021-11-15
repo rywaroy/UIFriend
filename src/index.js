@@ -1,5 +1,6 @@
 const ACTIVE_KEY_CODE = 18;
 const TAG_HEIGHT = 16;
+const LINE_SIZE = 2;
 
 class CurrentElement {
     constructor(element) {
@@ -31,9 +32,9 @@ class CurrentElement {
 
     remove() {
         if (this.container) {
-            this.container.remove();
+            this.container.remove(); 
         }
-        return null;
+        this.container = null;
     }
 }
 
@@ -98,7 +99,7 @@ class Line {
         lineTag.innerText = this.text;
         if (this.type === 'top' || this.type === 'bottom') {
             lineTag.style.left = '5px';
-            lineTag.style.top = `${this.height / 2 - 8}px`;
+            lineTag.style.top = `${this.height / 2 - TAG_HEIGHT / 2}px`;
             this.line.classList.add('vertical');
         }
         if (this.type === 'left' || this.type === 'right') {
@@ -148,7 +149,7 @@ class Mark {
                 this.current.right > this.target.left
             ) {
                 const height = Math.round(Math.abs(this.current.top - this.target.bottom));
-                const width = 2;
+                const width = LINE_SIZE;
                 const x = this.verticalLineX();
                 const y = this.target.bottom;
                 this.topLine = new Line(width, height, x, y, `${height}px`, 'top');
@@ -156,7 +157,7 @@ class Mark {
             }
         } else {
             const height = Math.round(Math.abs(this.current.top - this.target.top));
-            const width = 2;
+            const width = LINE_SIZE;
             const x = this.verticalLineX();
             const y = Math.min(this.current.top, this.target.top);
             this.topLine = new Line(width, height, x, y, `${height}px`, 'top');
@@ -171,7 +172,7 @@ class Mark {
                 this.current.right > this.target.left
             ) {
                 const height = Math.round(Math.abs(this.target.top - this.current.bottom));
-                const width = 2;
+                const width = LINE_SIZE;
                 const x = this.verticalLineX();
                 const y = this.current.bottom;
                 this.bottomLine = new Line(width, height, x, y, `${height}px`, 'bottom');
@@ -179,7 +180,7 @@ class Mark {
             }
         } else {
             const height = Math.round(Math.abs(this.target.bottom - this.current.bottom));
-            const width = 2;
+            const width = LINE_SIZE;
             const x = this.verticalLineX();
             const y = Math.min(this.current.bottom, this.target.bottom);
             this.bottomLine = new Line(width, height, x, y, `${height}px`, 'bottom');
@@ -214,7 +215,7 @@ class Mark {
                 this.current.top < this.target.bottom &&
                 this.current.bottom > this.target.top
             ) {
-                const height = 2;
+                const height = LINE_SIZE;
                 const width = Math.round(Math.abs(this.current.left - this.target.right));
                 const x = this.target.right;
                 const y = this.horizontalLineY();
@@ -222,7 +223,7 @@ class Mark {
                 this.leftLine.create();
             }
         } else {
-            const height = 2;
+            const height = LINE_SIZE;
             const width = Math.round(Math.abs(this.current.left - this.target.left));
             const x = Math.min(this.current.left, this.target.left);
             const y = this.horizontalLineY();
@@ -238,7 +239,7 @@ class Mark {
                 this.current.top < this.target.bottom &&
                 this.current.bottom > this.target.top
             ) {
-                const height = 2;
+                const height = LINE_SIZE;
                 const width = Math.round(Math.abs(this.target.left - this.current.right));
                 const x = this.current.right;
                 const y = this.horizontalLineY();
@@ -246,7 +247,7 @@ class Mark {
                 this.rightLine.create();
             }
         } else {
-            const height = 2;
+            const height = LINE_SIZE;
             const width = Math.round(Math.abs(this.current.right - this.target.right));
             const x = Math.min(this.current.right, this.target.right);
             const y = this.horizontalLineY();
@@ -302,6 +303,12 @@ class UIFriend {
         this.currentElement = null;
         this.targetElement = null;
         this.mark = null;
+        this.state = 0; // 0: 关闭  1：开启
+
+        this.keyDown = this.onKeyDown.bind(this);
+        this.mounseMove = this.onMounseMove.bind(this);
+        this.mouseDown = this.onMouseDown.bind(this);
+        this.mouseWheel = this.onMouseWheel.bind(this);
     }
 
     createCurrentElement(element) {
@@ -384,21 +391,24 @@ class UIFriend {
     }
 
     start() {
-        window.addEventListener('keydown', this.onKeyDown.bind(this));
-        window.addEventListener('mousemove', this.onMounseMove.bind(this));
-        window.addEventListener('mousedown', this.onMouseDown.bind(this));
-        window.addEventListener('mousewheel', this.onMouseWheel.bind(this));
-        window.addEventListener('wheel', this.onMouseWheel.bind(this));
+        this.state = 1;
+        window.addEventListener('keydown', this.keyDown);
+        window.addEventListener('mousemove', this.mounseMove);
+        window.addEventListener('mousedown', this.mouseDown);
+        window.addEventListener('mousewheel', this.mouseWheel);
+        window.addEventListener('wheel', this.mouseWheel);
         this.addStyle();
     }
 
     stop() {
-        window.removeEventListener('keydown', this.onKeyDown.bind(this));
-        window.removeEventListener('mousemove', this.onMounseMove.bind(this));
-        window.removeEventListener('mousedown', this.onMouseDown.bind(this));
-        window.removeEventListener('mousewheel', this.onMouseWheel.bind(this));
-        window.removeEventListener('wheel', this.onMouseWheel.bind(this));
+        this.state = 0;
+        window.removeEventListener('keydown', this.keyDown);
+        window.removeEventListener('mousemove', this.mounseMove);
+        window.removeEventListener('mousedown', this.mouseDown);
+        window.removeEventListener('mousewheel', this.mouseWheel);
+        window.removeEventListener('wheel', this.mouseWheel);
         this.removeStyle();
+        this.clear();
     }
 
     addStyle() {
@@ -425,5 +435,17 @@ class UIFriend {
 
 const work = new UIFriend();
 
-work.start();
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'state') {
+      sendResponse(work.state);
+    }
+    if (request.type === 'start') {
+        work.start();
+        sendResponse(work.state);
+    }
+    if (request.type === 'stop') {
+        work.stop();
+        sendResponse(work.state);
+    }
+});
 
