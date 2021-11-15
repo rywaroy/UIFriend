@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.popup-container {
+    width: 250px;
+    padding: 24px;
+}
+
+.popup-container-title {
+    line-height: 20px;
+    border-bottom: 1px solid #ebebeb;
+    font-size: 16px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.86);
+    padding: 0 0 16px;
+}
+
+.popup-container-list {
+    margin-top: 15px;
+}
+
+.popup-container-key {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.86);
+    font-weight: 500;
+}
+
+.popup-container-opt {
+    margin-top: 30px;
+}
+
+.popup-container-button {
+    width: 70px;
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    transition: .1s;
+    font-weight: 500;
+    user-select: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.popup-container-button.start {
+    background-color: #409eff;
+    border-color: #409eff;
+    color: #fff;
+}
+
+.popup-container-button.stop {
+    background-color: #f56c6c;
+    border-color: #f56c6c;
+    color: #fff;
+}
