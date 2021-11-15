@@ -19,6 +19,7 @@
     pointer-events: none;
     left: -2px;
     top: -16px;
+    white-space: nowrap;
 }
 
 .ui-friend__target-element-container {
@@ -43,6 +44,7 @@
     left: -2px;
     top: -16px;
     box-sizing: border-box;
+    white-space: nowrap;
 }
 
 .ui-friend__line {
