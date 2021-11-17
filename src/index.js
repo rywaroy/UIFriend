@@ -3,9 +3,10 @@ const TAG_HEIGHT = 16;
 const LINE_SIZE = 2;
 
 class CurrentElement {
-    constructor(element) {
+    constructor(element, style) {
         this.element = element;
         this.rect = element.getBoundingClientRect();
+        this.style = style;
     }
 
     create() {
@@ -28,19 +29,30 @@ class CurrentElement {
             this.tag.style.left = `${-left}px`;
         }
         this.container.appendChild(this.tag);
+        if (this.style) {
+            this.createStyle();
+        }
+        
+    }
 
-        this.style = new Style(this.element);
+    createStyle() {
+        this.styleElement = new Style(this.element);
+    }
+
+    removeStyle() {
+        if (this.styleElement) {
+            this.styleElement.remove();
+        }
+        this.styleElement = null;
     }
 
     remove() {
+        this.removeStyle();
         if (this.container) {
             this.container.remove(); 
         }
-        if (this.style) {
-            this.style.remove();
-        }
         this.container = null;
-        this.style = null;
+        
     }
 }
 
@@ -86,7 +98,6 @@ class Style {
         this.computedStyle = window.getComputedStyle(element)
         this.element = document.createElement('div');
         this.element.classList.add('ui-friend__style-box');
-        // this.styleList = ['font-family', 'font-size', 'line-height', 'color', 'background-color', 'padding', 'margin', 'border', 'border-top', 'border-left', 'border-right', 'border-bottom'];
         this.styleList = [
             { name: 'font-family' },
             { name: 'font-size' },
@@ -375,6 +386,7 @@ class UIFriend {
         this.targetElement = null;
         this.mark = null;
         this.state = 0; // 0: 关闭  1：开启
+        this.style = 0; // 0: 关闭  1：开启 
 
         this.keyDown = this.onKeyDown.bind(this);
         this.mounseMove = this.onMounseMove.bind(this);
@@ -384,7 +396,7 @@ class UIFriend {
 
     createCurrentElement(element) {
         if (element && (element !== (this.currentElement ? this.currentElement.element : null))) {
-            this.currentElement = new CurrentElement(element);
+            this.currentElement = new CurrentElement(element, this.style);
             this.currentElement.create();
         }
     }
@@ -508,15 +520,32 @@ const work = new UIFriend();
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'state') {
-      sendResponse(work.state);
+      sendResponse({
+          state: work.state,
+          style: work.style,
+      });
     }
     if (request.type === 'start') {
         work.start();
-        sendResponse(work.state);
+        sendResponse();
     }
     if (request.type === 'stop') {
         work.stop();
-        sendResponse(work.state);
+        sendResponse();
+    }
+    if (request.type === 'style-start') {
+        work.style = 1;
+        if (work.currentElement) {
+            work.currentElement.createStyle();
+        }
+        sendResponse();
+    }
+    if (request.type === 'style-stop') {
+        work.style = 0;
+        if (work.currentElement) {
+            work.currentElement.removeStyle();
+        }
+        sendResponse();
     }
 });
 

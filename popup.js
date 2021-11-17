@@ -17,25 +17,36 @@ document.addEventListener('DOMContentLoaded', function () {
     class State {
         constructor() {
             this.state = 0;
+            this.style = 0;
             this.button = document.querySelector('.popup-container-button');
+            this.styleSwitch = document.querySelector('.popup-container-style');
             this.bind();
         }
 
         bind() {
             this.button.addEventListener('click', () => {
                 if (this.state === 0) {
-                    sendMessageToContent({ type: 'start' }, res => {
-                        if (res === 1) {
-                            this.start();
-                        }
-                    })
+                    sendMessageToContent({ type: 'start' }, () => {
+                        this.start();
+                    });
+                    
                 }
                 if (this.state === 1) {
-                    sendMessageToContent({ type: 'stop' }, res => {
-                        if (res === 0) {
-                            this.stop();
-                        }
-                    })
+                    sendMessageToContent({ type: 'stop' }, () => {
+                        this.stop();
+                    });
+                }
+            });
+            this.styleSwitch.addEventListener('change', () => {
+                if (this.style === 0) {
+                    sendMessageToContent({ type: 'style-start' }, () => {
+                        this.styleStart();
+                    });
+                }
+                if (this.style === 1) {
+                    sendMessageToContent({ type: 'style-stop' }, () => {
+                        this.styleStop();
+                    });
                 }
             });
         }
@@ -54,13 +65,30 @@ document.addEventListener('DOMContentLoaded', function () {
             this.state = 0;
         }
 
+        styleStart() {
+            this.styleSwitch.checked = true;
+            this.style = 1;
+        }
+
+        styleStop() {
+            this.styleSwitch.checked = false;
+            this.style = 0;
+        }
+
         getState() {
             sendMessageToContent({ type: 'state' }, res => {
-                if (res === 0) {
+                const { state, style } = res;
+                if (state === 0) {
                     this.stop();
                 }
-                if (res === 1) {
+                if (state === 1) {
                     this.start();
+                }
+                if (style === 0) {
+                    this.styleStop();
+                }
+                if (style === 1) {
+                    this.styleStart();
                 }
             });
         }
