@@ -71,4 +71,5 @@
     background-color: #E02401;
     color: #fff;
     z-index: 2;
+    white-space: nowrap;
 }
