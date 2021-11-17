@@ -20,6 +20,7 @@
 
 .popup-container-list {
     margin-top: 15px;
+    margin-bottom: 30px;
 }
 
 .popup-container-key {
@@ -32,7 +33,7 @@
 }
 
 .popup-container-opt {
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .popup-container-button {
@@ -49,7 +50,7 @@
     box-sizing: border-box;
     outline: none;
     margin: 0;
-    transition: .1s;
+    transition: 0.1s;
     font-weight: 500;
     user-select: none;
     padding: 8px 12px;
@@ -67,4 +68,76 @@
     background-color: #f56c6c;
     border-color: #f56c6c;
     color: #fff;
+}
+
+.popup-switch {
+    width: 52px;
+    height: 24px;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none;
+}
+.popup-switch:before {
+    content: "";
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.popup-switch:checked {
+    border-color: #64bd63;
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+}
+.popup-switch:checked:before {
+    left: 28px;
+}
+.popup-switch.popup-switch-animbg {
+    transition: background-color ease 0.4s;
+}
+.popup-switch.popup-switch-animbg:before {
+    transition: left 0.3s;
+}
+.popup-switch.popup-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #64bd63;
+    transition: border-color 0.4s, background-color ease 0.4s;
+}
+.popup-switch.popup-switch-animbg:checked:before {
+    transition: left 0.3s;
+}
+.popup-switch.popup-switch-anim {
+    transition: border cubic-bezier(0, 0, 0, 1) 0.4s,
+        box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
+}
+.popup-switch.popup-switch-anim:before {
+    transition: left 0.3s;
+}
+.popup-switch.popup-switch-anim:checked {
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+    transition: border ease 0.4s, box-shadow ease 0.4s,
+        background-color ease 1.2s;
+}
+.popup-switch.popup-switch-anim:checked:before {
+    transition: left 0.3s;
 }
