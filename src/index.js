@@ -28,13 +28,19 @@ class CurrentElement {
             this.tag.style.left = `${-left}px`;
         }
         this.container.appendChild(this.tag);
+
+        this.style = new Style(this.element);
     }
 
     remove() {
         if (this.container) {
             this.container.remove(); 
         }
+        if (this.style) {
+            this.style.remove();
+        }
         this.container = null;
+        this.style = null;
     }
 }
 
@@ -72,6 +78,71 @@ class TargetElement {
             this.container.remove();
         }
         this.container = null;
+    }
+}
+
+class Style {
+    constructor(element) {
+        this.computedStyle = window.getComputedStyle(element)
+        this.element = document.createElement('div');
+        this.element.classList.add('ui-friend__style-box');
+        // this.styleList = ['font-family', 'font-size', 'line-height', 'color', 'background-color', 'padding', 'margin', 'border', 'border-top', 'border-left', 'border-right', 'border-bottom'];
+        this.styleList = [
+            { name: 'font-family' },
+            { name: 'font-size' },
+            { name: 'line-height', ignore: 'normal' },
+            { name: 'color' },
+            { name: 'background-color' },
+            { name: 'padding', ignore: '0px' },
+            { name: 'margin', ignore: '0px' },
+            {
+                name: 'border',
+                ignore: '0px',
+                children: [
+                    { name: 'border-top', ignore: '0px' },
+                    { name: 'border-left', ignore: '0px' },
+                    { name: 'border-right', ignore: '0px' },
+                    { name: 'border-bottom', ignore: '0px' },
+                ]
+            },
+        ]
+        this.create();
+    }
+
+    create() {
+        const style = [];
+        this.styleList.forEach(item => {
+            const value = this.computedStyle.getPropertyValue(item.name);
+            if (value && value.indexOf(item.ignore) === -1) {
+                style.push({
+                    label: item.name,
+                    value,
+                });
+            } else if (item.children) {
+                item.children.forEach(child => {
+                    const value = this.computedStyle.getPropertyValue(child.name);
+                    if (value && value.indexOf(child.ignore) === -1) {
+                        style.push({
+                            label: child.name,
+                            value,
+                        });
+                    }
+                });
+            }
+            
+        });
+        let html = '';
+        style.forEach(item => {
+            if (item.value) {
+                html += `<div>${item.label}: ${item.value}</div>`;
+            }
+        });
+        this.element.innerHTML = html;
+        document.body.appendChild(this.element);
+    }
+
+    remove() {
+        this.element.remove();
     }
 }
 

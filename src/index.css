@@ -73,3 +73,14 @@
     z-index: 2;
     white-space: nowrap;
 }
+
+.ui-friend__style-box {
+    position: fixed;
+    z-index: 9999;
+    bottom: 0;
+    right: 0;
+    max-width: 300px;
+    min-width: 200px;
+    font-size: 12px;
+    pointer-events: none;
+}
