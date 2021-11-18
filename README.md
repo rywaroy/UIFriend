@@ -14,4 +14,10 @@
 
 打开 chrome://extensions/
 
+开启开发者模式
+
 拖拽文件夹添加
+
+## 启用
+
+![](docs/images/start.jpg)
