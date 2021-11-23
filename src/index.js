@@ -1,4 +1,5 @@
 const ACTIVE_KEY_CODE = 18;
+const STOP_KEY_CODE = 27;
 const TAG_HEIGHT = 16;
 const LINE_SIZE = 2;
 
@@ -433,6 +434,8 @@ class UIFriend {
             const element = elements[elements.length - 1];
             this.active = true;
             this.createCurrentElement(element);
+        } else if (e.keyCode === STOP_KEY_CODE) {
+            this.stop()
         }
     }
 
